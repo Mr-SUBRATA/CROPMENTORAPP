@@ -6,7 +6,6 @@ import FeatureCard from '../../components/FeatureCard';
 import { translations } from '../../constants/translations';
 import FeatureModal from '../../components/FeatureModal';
 
-// Define a type for the feature objects to fix the 'any' type error
 interface Feature {
   icon: string;
   title: string;
@@ -37,11 +36,15 @@ const HomeScreen = (): React.JSX.Element => {
 
   const t = translations[lang as keyof typeof translations] || translations.en;
 
-  // Now the 'feature' parameter is correctly typed with the 'Feature' interface
   const handleFeaturePress = (feature: Feature) => {
     setModalTitle(feature.title);
     setModalContent(feature.content);
     setModalVisible(true);
+  };
+
+  const handleOpenDrawer = () => {
+    // This will open the new placeholder drawer screen
+    router.push('/screens/DrawerScreen');
   };
 
   const featureData: Feature[] = [
@@ -51,7 +54,6 @@ const HomeScreen = (): React.JSX.Element => {
     { icon: '🍃', title: t.localRemedies, color: '#ffa726', content: 'Discover effective, low-cost remedies using locally available materials. This feature is coming soon!' },
   ];
 
-  // Handler functions for the new input pages
   const handleWrittenInput = () => {
     router.push('/screens/WrittenInputScreen');
   };
@@ -67,10 +69,13 @@ const HomeScreen = (): React.JSX.Element => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Header */}
+        {/* Header with hamburger menu */}
         <View style={styles.header}>
+          <TouchableOpacity onPress={handleOpenDrawer} style={styles.menuButton}>
+            <Text style={styles.menuIcon}>☰</Text>
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>CropMentor</Text>
-          <TouchableOpacity onPress={() => router.push('/screens/SettingsScreen')}>
+          <TouchableOpacity onPress={() => router.push('/screens/SettingsScreen')} style={styles.settingsButton}>
             <Text style={styles.settingsIcon}>⚙️</Text>
           </TouchableOpacity>
         </View>
@@ -147,15 +152,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 15,
+    padding: 29,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+  },
+  menuButton: {
+    padding: 5,
+    marginRight: 10,
+  },
+  menuIcon: {
+    fontSize: 24,
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    flex: 1, // Ensures the title takes up available space
+    textAlign: 'center',
+  },
+  settingsButton: {
+    padding: 5,
+    marginLeft: 10,
   },
   settingsIcon: {
     fontSize: 24,

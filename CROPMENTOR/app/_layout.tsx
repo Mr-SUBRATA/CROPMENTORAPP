@@ -22,6 +22,13 @@ export default function RootLayout() {
         <Stack.Screen name="screens/WrittenInputScreen" options={{ headerShown: false }} />
         <Stack.Screen name="screens/VoiceInputScreen" options={{ headerShown: false }} />
         <Stack.Screen name="screens/ImageInputScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/DrawerScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/MarketPricesScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/DIYRemediesScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/AICallSupportScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/EmpoweredFarmersScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/DisasterNewsScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/SoilScreen" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />
