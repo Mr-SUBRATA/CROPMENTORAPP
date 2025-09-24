@@ -4,10 +4,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import FeatureCard from '../../components/FeatureCard';
 import { translations } from '../../constants/translations';
+import FeatureModal from '../../components/FeatureModal';
+
+// Define a type for the feature objects to fix the 'any' type error
+interface Feature {
+  icon: string;
+  title: string;
+  color: string;
+  content: string;
+}
 
 const HomeScreen = (): React.JSX.Element => {
   const [lang, setLang] = useState('en');
   const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
   useEffect(() => {
     const getLang = async () => {
@@ -24,6 +36,20 @@ const HomeScreen = (): React.JSX.Element => {
   }, []);
 
   const t = translations[lang as keyof typeof translations] || translations.en;
+
+  // Now the 'feature' parameter is correctly typed with the 'Feature' interface
+  const handleFeaturePress = (feature: Feature) => {
+    setModalTitle(feature.title);
+    setModalContent(feature.content);
+    setModalVisible(true);
+  };
+
+  const featureData: Feature[] = [
+    { icon: '🌿', title: t.cropDoctor, color: '#ff8c42', content: 'Upload a clear picture of the affected leaf. Our AI will analyze it and provide a diagnosis.' },
+    { icon: '🚜', title: t.govtSchemes, color: '#4CAF50', content: 'Here you will find a list of government schemes applicable to your region and crops. This feature is coming soon!' },
+    { icon: '☁️', title: t.weather, color: '#64b5f6', content: 'Today\'s forecast: Sunny with a high of 32°C.' },
+    { icon: '🍃', title: t.localRemedies, color: '#ffa726', content: 'Discover effective, low-cost remedies using locally available materials. This feature is coming soon!' },
+  ];
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -59,10 +85,11 @@ const HomeScreen = (): React.JSX.Element => {
 
           {/* Features Grid */}
           <View style={styles.featuresGrid}>
-            <FeatureCard icon="🌿" title={t.cropDoctor} color="#ff8c42" />
-            <FeatureCard icon="🚜" title={t.govtSchemes} color="#4CAF50" />
-            <FeatureCard icon="☁️" title={t.weather} color="#64b5f6" />
-            <FeatureCard icon="🍃" title={t.localRemedies} color="#ffa726" />
+            {featureData.map((item, index) => (
+              <TouchableOpacity key={index} style={styles.featureCardContainer} onPress={() => handleFeaturePress(item)}>
+                <FeatureCard icon={item.icon} title={item.title} color={item.color} />
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
 
@@ -81,117 +108,120 @@ const HomeScreen = (): React.JSX.Element => {
             <Text style={styles.navText}>{t.myProfile}</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Modal Component */}
+        <FeatureModal
+          title={modalTitle}
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          content={modalContent}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        backgroundColor: '#5cb85c',
-    },
-    container: {
-        flex: 1,
-        backgroundColor: '#f0f4f7',
-    },
-    header: {
-        backgroundColor: '#5cb85c',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    headerTitle: {
-        color: '#fff',
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    settingsIcon: {
-        fontSize: 26,
-    },
-    scrollViewContent: {
-        paddingBottom: 20,
-    },
-    querySection: {
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 20,
-        marginHorizontal: 20,
-        marginTop: 20,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
-    },
-    avatar: {
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        marginBottom: 10,
-        borderWidth: 3,
-        borderColor: '#5cb85c'
-    },
-    queryPrompt: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: '#333',
-        marginBottom: 25,
-    },
-    inputOptions: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-    },
-    inputOption: {
-        alignItems: 'center',
-    },
-    inputIcon: {
-        fontSize: 30,
-        color: '#5cb85c',
-    },
-    inputOptionText: {
-        marginTop: 8,
-        color: '#555',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    featuresGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        marginTop: 20,
-    },
-    bottomNav: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingVertical: 10,
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        backgroundColor: '#ffffff',
-    },
-    navItem: {
-        alignItems: 'center',
-        flex: 1,
-    },
-    navIcon: {
-        fontSize: 26,
-        color: '#888',
-    },
-    navText: {
-        fontSize: 12,
-        color: '#888',
-        marginTop: 2,
-    },
-    activeNavText: {
-        color: '#5cb85c',
-        fontWeight: '600'
-    }
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  settingsIcon: {
+    fontSize: 24,
+  },
+  scrollViewContent: {
+    padding: 15,
+  },
+  querySection: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
+  },
+  queryPrompt: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+  },
+  inputOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  inputOption: {
+    alignItems: 'center',
+  },
+  inputIcon: {
+    fontSize: 24,
+    marginBottom: 5,
+  },
+  inputOptionText: {
+    fontSize: 12,
+    color: '#666',
+  },
+  featuresGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  featureCardContainer: {
+    width: '48%',
+    marginBottom: 10,
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    backgroundColor: '#fff',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
+  navIcon: {
+    fontSize: 24,
+    color: '#666',
+  },
+  navText: {
+    fontSize: 12,
+    color: '#666',
+  },
+  activeNavText: {
+    color: '#5cb85c',
+    fontWeight: 'bold',
+  },
 });
 
 export default HomeScreen;
-
