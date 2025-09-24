@@ -1,5 +1,7 @@
 export const translations = {
   en: {
+    select_language: 'Select your Language',
+    more_languages: 'More Languages',
     enterYourQuery: "What's on your mind today?",
     writtenInput: 'Written Input',
     voiceInput: 'Voice Input',
@@ -11,15 +13,15 @@ export const translations = {
     home: 'Home',
     voiceAssistant: 'Voice Assistant',
     myProfile: 'My Profile',
-    yourFarmAssistant: 'Your Farm Assistant', // Added
-    signInOrCreateAccount: 'Sign In or Create Account', // Added
-    mobileOrEmail: 'Mobile Number or Email', // Added
-    password: 'Password', // Added
-    continue: 'Continue', // Added
-    terms: 'By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.', // Added
-    or: 'OR', // Added
-    continueWithGoogle: 'Continue with Google', // Added
-    continueWithFacebook: 'Continue with Facebook', // Added
+    yourFarmAssistant: 'Your Farm Assistant',
+    signInOrCreateAccount: 'Sign In or Create Account',
+    mobileOrEmail: 'Mobile Number or Email',
+    password: 'Password',
+    continue: 'Continue',
+    terms: 'By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.',
+    or: 'OR',
+    continueWithGoogle: 'Continue with Google',
+    continueWithFacebook: 'Continue with Facebook',
     settings: {
       settingsTitle: 'Settings',
       generalSettingsTitle: 'General Settings',

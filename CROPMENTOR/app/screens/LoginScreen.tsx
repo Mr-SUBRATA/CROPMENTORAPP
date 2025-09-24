@@ -6,6 +6,8 @@ import { translations } from '../../constants/translations';
 
 const LoginScreen = (): React.JSX.Element => {
     const [lang, setLang] = useState('en');
+    const [mobileOrEmail, setMobileOrEmail] = useState('');
+    const [password, setPassword] = useState('');
     const router = useRouter();
 
     useEffect(() => {
@@ -17,9 +19,12 @@ const LoginScreen = (): React.JSX.Element => {
     }, []);
 
     const t = translations[lang as keyof typeof translations] || translations.en;
+    
+    // Check if the mobile number is 10 digits and password is not empty
+    const isValid = mobileOrEmail.length === 10 && !isNaN(Number(mobileOrEmail)) && password.length > 0;
 
     const handleLogin = () => {
-        // Basic validation can be added here
+        // This function will only be called if the button is not disabled
         router.push('/screens/HomeScreen');
     };
 
@@ -46,7 +51,10 @@ const LoginScreen = (): React.JSX.Element => {
                                 placeholder={t.mobileOrEmail}
                                 style={styles.input}
                                 placeholderTextColor="#888"
-                                keyboardType="email-address"
+                                keyboardType="number-pad" // Use number-pad for mobile number input
+                                value={mobileOrEmail}
+                                onChangeText={setMobileOrEmail}
+                                maxLength={10} // Restrict to 10 characters
                             />
                         </View>
                         <View style={styles.inputGroup}>
@@ -56,10 +64,16 @@ const LoginScreen = (): React.JSX.Element => {
                                 style={styles.input}
                                 placeholderTextColor="#888"
                                 secureTextEntry
+                                value={password}
+                                onChangeText={setPassword}
                             />
                         </View>
 
-                        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <TouchableOpacity
+                            style={[styles.loginButton, !isValid && styles.disabledButton]}
+                            onPress={handleLogin}
+                            disabled={!isValid}
+                        >
                             <Text style={styles.loginButtonText}>{t.continue}</Text>
                         </TouchableOpacity>
 
@@ -198,7 +212,10 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#555',
     },
+    // Added style for disabled button
+    disabledButton: {
+        opacity: 0.5,
+    },
 });
 
 export default LoginScreen;
-
