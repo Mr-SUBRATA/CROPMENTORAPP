@@ -51,6 +51,19 @@ const HomeScreen = (): React.JSX.Element => {
     { icon: '🍃', title: t.localRemedies, color: '#ffa726', content: 'Discover effective, low-cost remedies using locally available materials. This feature is coming soon!' },
   ];
 
+  // Handler functions for the new input pages
+  const handleWrittenInput = () => {
+    router.push('/screens/WrittenInputScreen');
+  };
+
+  const handleVoiceInput = () => {
+    router.push('/screens/VoiceInputScreen');
+  };
+
+  const handleImageInput = () => {
+    router.push('/screens/ImageInputScreen');
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -68,15 +81,15 @@ const HomeScreen = (): React.JSX.Element => {
             <Image source={require('../../assets/images/farmer_avater.png')} style={styles.avatar} />
             <Text style={styles.queryPrompt}>{t.enterYourQuery}</Text>
             <View style={styles.inputOptions}>
-              <TouchableOpacity style={styles.inputOption}>
+              <TouchableOpacity style={styles.inputOption} onPress={handleWrittenInput}>
                 <Text style={styles.inputIcon}>✏️</Text>
                 <Text style={styles.inputOptionText}>{t.writtenInput}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.inputOption}>
+              <TouchableOpacity style={styles.inputOption} onPress={handleVoiceInput}>
                 <Text style={styles.inputIcon}>🎤</Text>
                 <Text style={styles.inputOptionText}>{t.voiceInput}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.inputOption}>
+              <TouchableOpacity style={styles.inputOption} onPress={handleImageInput}>
                 <Text style={styles.inputIcon}>📷</Text>
                 <Text style={styles.inputOptionText}>{t.imageInput}</Text>
               </TouchableOpacity>
