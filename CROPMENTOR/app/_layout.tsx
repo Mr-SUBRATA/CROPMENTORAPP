@@ -29,6 +29,8 @@ export default function RootLayout() {
         <Stack.Screen name="screens/EmpoweredFarmersScreen" options={{ headerShown: false }} />
         <Stack.Screen name="screens/DisasterNewsScreen" options={{ headerShown: false }} />
         <Stack.Screen name="screens/SoilScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/ProfileScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="screens/SupportHelpScreen" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />

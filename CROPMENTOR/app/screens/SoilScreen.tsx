@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#05ff16ff',
+    borderBottomColor: '#ddf1deff',
     backgroundColor: '#fff',
   },
   headerTitle: {
