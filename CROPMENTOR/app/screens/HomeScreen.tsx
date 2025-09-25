@@ -121,7 +121,8 @@ const HomeScreen = (): React.JSX.Element => {
             <Text style={styles.navIcon}>🎤</Text>
             <Text style={styles.navText}>{t.voiceAssistant}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.navItem}>
+          {/* MODIFIED BUTTON HERE */}
+          <TouchableOpacity style={styles.navItem} onPress={() => router.push('/screens/ProfileScreen')}>
             <Text style={styles.navIcon}>👤</Text>
             <Text style={styles.navText}>{t.myProfile}</Text>
           </TouchableOpacity>
@@ -164,12 +165,10 @@ const styles = StyleSheet.create({
   menuIcon: {
     fontSize: 24,
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    flex: 1, // Ensures the title takes up available space
-    textAlign: 'center',
+  headerLogo: {
+    width: 150,
+    height: 40,
+    resizeMode: 'contain',
   },
   settingsButton: {
     padding: 5,
@@ -253,11 +252,6 @@ const styles = StyleSheet.create({
     color: '#5cb85c',
     fontWeight: 'bold',
   },
-  headerLogo: {
-  width: 200,
-  height: 60,
-  resizeMode: 'contain',
-},
 });
 
 export default HomeScreen;
