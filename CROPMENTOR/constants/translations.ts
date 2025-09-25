@@ -18,7 +18,7 @@ export const translations = {
     mobileOrEmail: 'Mobile Number or Email',
     password: 'Password',
     continue: 'Continue',
-    terms: 'By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.',
+    terms: "By continuing, you agree to our <a href='terms'>Terms of Service</a> and <a href='privacy'>Privacy Policy</a>.",
     or: 'OR',
     continueWithGoogle: 'Continue with Google',
     continueWithFacebook: 'Continue with Facebook',

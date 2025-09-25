@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ImageBackgr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { translations } from '../../constants/translations';
+import TermsAndPrivacyText from '../../components/ui/TermsAndPrivacyText';
 
 const LoginScreen = (): React.JSX.Element => {
     const [lang, setLang] = useState('en');
@@ -76,9 +77,7 @@ const LoginScreen = (): React.JSX.Element => {
                         >
                             <Text style={styles.loginButtonText}>{t.continue}</Text>
                         </TouchableOpacity>
-
-                        <Text style={styles.termsText}>{t.terms.replace(/<a href='#'>/g, '').replace(/<\/a>/g, '')}</Text>
-
+                        <TermsAndPrivacyText text={t.terms} style={styles.termsText} />
                         <View style={styles.socialLoginContainer}>
                             <Text style={styles.orText}>{t.or}</Text>
                             <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     },
     termsText: {
         fontSize: 12,
-        color: '#888',
+        color: '#060606ff',
         marginTop: 15,
         textAlign: 'center',
     },
