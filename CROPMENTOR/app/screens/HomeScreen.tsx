@@ -74,7 +74,7 @@ const HomeScreen = (): React.JSX.Element => {
           <TouchableOpacity onPress={handleOpenDrawer} style={styles.menuButton}>
             <Text style={styles.menuIcon}>☰</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>CropMentor</Text>
+          <Image source={require('../../assets/images/logo.png')} style={styles.headerLogo} />
           <TouchableOpacity onPress={() => router.push('/screens/SettingsScreen')} style={styles.settingsButton}>
             <Text style={styles.settingsIcon}>⚙️</Text>
           </TouchableOpacity>
@@ -253,6 +253,11 @@ const styles = StyleSheet.create({
     color: '#5cb85c',
     fontWeight: 'bold',
   },
+  headerLogo: {
+  width: 200,
+  height: 60,
+  resizeMode: 'contain',
+},
 });
 
 export default HomeScreen;
