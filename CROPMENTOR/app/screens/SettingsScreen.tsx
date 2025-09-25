@@ -2,18 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ScrollView, Switch, Modal, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { translations } from '../../constants/translations';
+import { Ionicons } from '@expo/vector-icons';
 
 const SettingsScreen = (): React.JSX.Element => {
     const router = useRouter();
-
-    // States for settings
     const [notificationsExpanded, setNotificationsExpanded] = useState(false);
     const [disasterAlert, setDisasterAlert] = useState(true);
     const [weatherAlert, setWeatherAlert] = useState(true);
     const [marketAlert, setMarketAlert] = useState(false);
-    
-    // States for language selection
     const [languageModalVisible, setLanguageModalVisible] = useState(false);
     const [currentLang, setCurrentLang] = useState('en');
 
@@ -29,10 +25,7 @@ const SettingsScreen = (): React.JSX.Element => {
         try {
             await AsyncStorage.clear();
             router.replace('/screens/LoginScreen');
-        } catch (error) {
-            console.error('Failed to clear AsyncStorage:', error);
-            Alert.alert('Error', 'Failed to logout. Please try again.');
-        }
+        } catch (error) { console.error('Failed to logout:', error); }
     };
 
     const handleSelectLanguage = async (langCode: string) => {
@@ -40,12 +33,10 @@ const SettingsScreen = (): React.JSX.Element => {
             await AsyncStorage.setItem('selectedLang', langCode);
             setCurrentLang(langCode);
             setLanguageModalVisible(false);
-            Alert.alert('Language Updated', `The app language has been set to ${languageOptions.find(l => l.code === langCode)?.name}. Please restart the app to see changes.`);
-        } catch (error) {
-            console.error('Failed to save language:', error);
-        }
+            Alert.alert('Language Updated', `Language set to ${languageOptions.find(l => l.code === langCode)?.name}. Please restart the app to see changes.`);
+        } catch (error) { console.error('Failed to save language:', error); }
     };
-    
+
     const languageOptions = [
       { name: 'English', code: 'en' },
       { name: 'हिन्दी (Hindi)', code: 'hi' },
@@ -61,10 +52,9 @@ const SettingsScreen = (): React.JSX.Element => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <Text style={styles.backButtonText}>←</Text>
+                    <Ionicons name="arrow-back" size={24} color="#007aff" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Settings</Text>
             </View>
@@ -73,30 +63,35 @@ const SettingsScreen = (): React.JSX.Element => {
                 {/* Account Section */}
                 <Text style={styles.sectionTitle}>Account</Text>
                 <View style={styles.section}>
-                    {/* FIXED: Using full path for navigation */}
                     <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/ProfileScreen')}>
-                        <Text style={styles.rowIcon}>👤</Text>
+                        <Ionicons name="person-outline" size={20} color="#555" style={styles.rowIcon} />
                         <Text style={styles.rowLabel}>Edit Profile</Text>
-                        <Text style={styles.rowChevron}>›</Text>
+                        <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
+                    </TouchableOpacity>
+                    <View style={styles.divider} />
+                    <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/DiagnosisHistoryScreen')}>
+                        <Ionicons name="medkit-outline" size={20} color="#555" style={styles.rowIcon} />
+                        <Text style={styles.rowLabel}>Your Diagnosis</Text>
+                        <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                 </View>
 
-                {/* App Settings Section */}
+                {/* FIXED: App Settings Section */}
                 <Text style={styles.sectionTitle}>App Settings</Text>
                 <View style={styles.section}>
                     <TouchableOpacity style={styles.row} onPress={() => setLanguageModalVisible(true)}>
-                        <Text style={styles.rowIcon}>🌐</Text>
+                        <Ionicons name="globe-outline" size={20} color="#555" style={styles.rowIcon} />
                         <Text style={styles.rowLabel}>Language</Text>
                         <View style={styles.languageIndicator}>
                             <Text style={styles.currentLangText}>{languageOptions.find(l => l.code === currentLang)?.name}</Text>
-                            <Text style={styles.rowChevron}>›</Text>
+                            <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                         </View>
                     </TouchableOpacity>
                     <View style={styles.divider} />
                     <TouchableOpacity style={styles.row} onPress={() => setNotificationsExpanded(!notificationsExpanded)}>
-                        <Text style={styles.rowIcon}>🔔</Text>
+                        <Ionicons name="notifications-outline" size={20} color="#555" style={styles.rowIcon} />
                         <Text style={styles.rowLabel}>Notifications</Text>
-                        <Text style={styles.rowChevron}>{notificationsExpanded ? 'ˆ' : '›'}</Text>
+                        <Ionicons name={notificationsExpanded ? 'chevron-down' : 'chevron-forward'} size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                     {notificationsExpanded && (
                         <View style={styles.subSection}>
@@ -107,51 +102,37 @@ const SettingsScreen = (): React.JSX.Element => {
                     )}
                 </View>
 
-                {/* Support Section */}
+                {/* FIXED: Support Section */}
                 <Text style={styles.sectionTitle}>Support</Text>
                 <View style={styles.section}>
-                    {/* FIXED: Using full path for navigation */}
                     <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/SupportHelpScreen')}>
-                        <Text style={styles.rowIcon}>❓</Text>
+                        <Ionicons name="help-circle-outline" size={20} color="#555" style={styles.rowIcon} />
                         <Text style={styles.rowLabel}>Support & Help</Text>
-                        <Text style={styles.rowChevron}>›</Text>
+                        <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                     <View style={styles.divider} />
                     <TouchableOpacity style={styles.row} onPress={() => Alert.alert('Report a Problem', 'Feature coming soon!')}>
-                        <Text style={styles.rowIcon}>⚠️</Text>
+                        <Ionicons name="alert-circle-outline" size={20} color="#555" style={styles.rowIcon} />
                         <Text style={styles.rowLabel}>Report a Problem</Text>
-                        <Text style={styles.rowChevron}>›</Text>
+                        <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                 </View>
                 
-                {/* Logout Button */}
                 <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
             </ScrollView>
-
-            {/* Language Selection Modal */}
-            <Modal
-                transparent={true}
-                visible={languageModalVisible}
-                animationType="fade"
-                onRequestClose={() => setLanguageModalVisible(false)}
-            >
+            
+            <Modal transparent={true} visible={languageModalVisible} animationType="fade" onRequestClose={() => setLanguageModalVisible(false)}>
                 <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPressOut={() => setLanguageModalVisible(false)}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Select Language</Text>
-                        <FlatList
-                            data={languageOptions}
-                            keyExtractor={(item) => item.code}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity style={styles.langOption} onPress={() => handleSelectLanguage(item.code)}>
-                                    <Text style={[styles.langText, item.code === currentLang && styles.selectedLangText]}>
-                                        {item.name}
-                                    </Text>
-                                    {item.code === currentLang && <Text style={styles.checkMark}>✓</Text>}
-                                </TouchableOpacity>
-                            )}
-                        />
+                        <FlatList data={languageOptions} keyExtractor={(item) => item.code} renderItem={({ item }) => (
+                            <TouchableOpacity style={styles.langOption} onPress={() => handleSelectLanguage(item.code)}>
+                                <Text style={[styles.langText, item.code === currentLang && styles.selectedLangText]}>{item.name}</Text>
+                                {item.code === currentLang && <Ionicons name="checkmark" size={20} color="#007aff" />}
+                            </TouchableOpacity>
+                        )} />
                     </View>
                 </TouchableOpacity>
             </Modal>
@@ -161,17 +142,15 @@ const SettingsScreen = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#f2f2f7' },
-    header: { flexDirection: 'row', alignItems: 'center', padding: 15, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e5e5ea' },
-    backButton: { marginRight: 15 },
-    backButtonText: { fontSize: 24, color: '#007aff' },
-    headerTitle: { fontSize: 20, fontWeight: 'bold' },
+    header: { flexDirection: 'row', alignItems: 'center', padding: 15, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e5e5ea', },
+    backButton: { position: 'absolute', left: 15, zIndex: 1 },
+    headerTitle: { fontSize: 20, fontWeight: 'bold', flex: 1, textAlign: 'center' },
     content: { paddingVertical: 20, paddingBottom: 50 },
     sectionTitle: { fontSize: 14, fontWeight: 'bold', color: '#6d6d72', marginLeft: 20, marginBottom: 8, textTransform: 'uppercase' },
     section: { backgroundColor: '#fff', marginBottom: 20, borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#c6c6c8' },
     row: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 12 },
-    rowIcon: { fontSize: 20, marginRight: 15 },
+    rowIcon: { marginRight: 15, width: 20, textAlign: 'center' },
     rowLabel: { flex: 1, fontSize: 16 },
-    rowChevron: { fontSize: 20, color: '#c7c7cc' },
     languageIndicator: { flexDirection: 'row', alignItems: 'center' },
     currentLangText: { fontSize: 16, color: '#8e8e93', marginRight: 5 },
     divider: { height: 1, backgroundColor: '#c6c6c8', marginLeft: 55 },
@@ -186,7 +165,6 @@ const styles = StyleSheet.create({
     langOption: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 },
     langText: { fontSize: 16 },
     selectedLangText: { color: '#007aff', fontWeight: 'bold' },
-    checkMark: { fontSize: 18, color: '#007aff' },
 });
 
 export default SettingsScreen;

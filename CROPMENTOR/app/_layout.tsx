@@ -34,6 +34,7 @@ export default function RootLayout() {
           <Stack.Screen name="screens/SupportHelpScreen" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           <Stack.Screen name="screens/NotificationsScreen" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/DiagnosisHistoryScreen" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
