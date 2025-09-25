@@ -22,10 +22,10 @@ export default function ProfileScreen() {
                     />
                     {/* This is static data for now. You'll connect this to a backend later. */}
                     <ThemedText type="title" style={styles.userName}>
-                        John Doe
+                        subrata das
                     </ThemedText>
                     <ThemedText type="default" style={styles.userLocation}>
-                        Farmville, State, Country
+                        India, West Bengal
                     </ThemedText>
                 </ThemedView>
 
@@ -34,7 +34,7 @@ export default function ProfileScreen() {
                         {i18n.t('personalInformation')}
                     </ThemedText>
                     <ThemedText style={styles.sectionItem}>
-                        Email: johndoe@example.com
+                        Email: subrata@example.com
                     </ThemedText>
                     <ThemedText style={styles.sectionItem}>
                         Phone: +91 9876543210

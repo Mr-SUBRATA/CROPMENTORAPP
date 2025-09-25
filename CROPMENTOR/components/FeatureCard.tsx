@@ -1,19 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
-const cardSize = (width - 60) / 2; // Subtracting 60 for padding/margin
-
-interface FeatureCardProps {
-  icon: string;
+// Define the props to accept an icon name and set
+interface Props {
+  iconName: string;
+  iconSet: 'Ionicons' | 'MaterialCommunityIcons';
   title: string;
   color: string;
 }
 
-const FeatureCard = ({ icon, title, color }: FeatureCardProps): React.JSX.Element => {
+const FeatureCard = ({ iconName, iconSet, title, color }: Props): React.JSX.Element => {
   return (
     <View style={[styles.card, { backgroundColor: color }]}>
-      <Text style={styles.icon}>{icon}</Text>
+      {/* Conditionally render the correct icon from the specified set */}
+      {iconSet === 'Ionicons' && <Ionicons name={iconName as any} size={30} color="#fff" />}
+      {iconSet === 'MaterialCommunityIcons' && <MaterialCommunityIcons name={iconName as any} size={30} color="#fff" />}
       <Text style={styles.title}>{title}</Text>
     </View>
   );
@@ -21,28 +23,21 @@ const FeatureCard = ({ icon, title, color }: FeatureCardProps): React.JSX.Elemen
 
 const styles = StyleSheet.create({
   card: {
-    width: cardSize,
-    height: cardSize,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 15,
-    margin: 5,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 120,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  icon: {
-    fontSize: 48,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
     color: '#fff',
+    fontWeight: 'bold',
+    marginTop: 10,
     textAlign: 'center',
   },
 });
