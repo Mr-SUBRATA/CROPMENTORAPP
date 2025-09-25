@@ -16,6 +16,8 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
+          {/* I have removed all the duplicate screen entries from this list */}
+          <Stack.Screen name="screens/WelcomeScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/LanguageScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/LoginScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/HomeScreen" options={{ headerShown: false }} />
@@ -32,9 +34,9 @@ export default function RootLayout() {
           <Stack.Screen name="screens/SoilScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/ProfileScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/SupportHelpScreen" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           <Stack.Screen name="screens/NotificationsScreen" options={{ headerShown: false }} />
           <Stack.Screen name="screens/DiagnosisHistoryScreen" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
