@@ -1,3 +1,4 @@
+// mr-subrata/cropmentorapp/CROPMENTORAPP-91fc9ddd2f3767e27dbd9adbb95f3f9578438a35/CROPMENTOR/app/screens/SettingsScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ScrollView, Switch, Modal, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -42,7 +43,7 @@ const SettingsScreen = (): React.JSX.Element => {
       { name: 'हिन्दी (Hindi)', code: 'hi' },
       { name: 'বাংলা (Bengali)', code: 'bn' },
       { name: 'తెలుగు (Telugu)', code: 'te' },
-      { name: 'मराठी (Marathi)', code: 'mr' },
+      { name: 'ಮರಾಠಿ (Marathi)', code: 'mr' },
       { name: 'தமிழ் (Tamil)', code: 'ta' },
       { name: 'ગુજરાતી (Gujarati)', code: 'gu' },
       { name: 'ಕನ್ನಡ (Kannada)', code: 'kn' },
@@ -68,12 +69,7 @@ const SettingsScreen = (): React.JSX.Element => {
                         <Text style={styles.rowLabel}>Edit Profile</Text>
                         <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
-                    <View style={styles.divider} />
-                    <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/DiagnosisHistoryScreen')}>
-                        <Ionicons name="medkit-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Your Diagnosis</Text>
-                        <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
-                    </TouchableOpacity>
+                    {/* The "Your Diagnosis" item has been moved to the home screen. */}
                 </View>
 
                 {/* FIXED: App Settings Section */}

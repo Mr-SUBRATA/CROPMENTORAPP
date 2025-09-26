@@ -1,3 +1,4 @@
+// mr-subrata/cropmentorapp/CROPMENTORAPP-91fc9ddd2f3767e27dbd9adbb95f3f9578438a35/CROPMENTOR/constants/translations.ts
 export const translations = {
   en: {
     select_language: 'Select your Language',
@@ -9,6 +10,7 @@ export const translations = {
     cropDoctor: 'Crop Doctor',
     govtSchemes: 'Govt. Schemes',
     weather: 'Weather',
+    yourDiagnosis: 'Your Diagnosis', // New translation key
     localRemedies: 'Local Remedies',
     home: 'Home',
     voiceAssistant: 'Voice Assistant',

@@ -1,3 +1,4 @@
+// mr-subrata/cropmentorapp/CROPMENTORAPP-91fc9ddd2f3767e27dbd9adbb95f3f9578438a35/CROPMENTOR/app/screens/HomeScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,13 +8,30 @@ import { translations } from '../../constants/translations';
 import FeatureModal from '../../components/FeatureModal';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-interface Feature {
+interface ModalFeature {
   iconName: string;
   iconSet: 'Ionicons' | 'MaterialCommunityIcons';
   title: string;
   color: string;
-  content: string;
+  content: string; // Content is required for modal features
+  path?: never; // Explicitly state path should not exist for ModalFeature
 }
+
+interface NavFeature {
+  iconName: string;
+  iconSet: 'Ionicons' | 'MaterialCommunityIcons';
+  title: string;
+  color: string;
+  path: string; // Path is required for navigation features
+  content?: never; // Explicitly state content should not exist for NavFeature
+}
+
+type Feature = ModalFeature | NavFeature; // Union type for all features
+
+// Type guard to determine if a feature is a navigation feature
+const isNavFeature = (feature: Feature): feature is NavFeature => {
+  return 'path' in feature && feature.path !== undefined;
+};
 
 const HomeScreen = (): React.JSX.Element => {
   const [lang, setLang] = useState('en');
@@ -33,20 +51,28 @@ const HomeScreen = (): React.JSX.Element => {
   const t = translations[lang as keyof typeof translations] || translations.en;
 
   const handleFeaturePress = (feature: Feature) => {
-    setModalTitle(feature.title);
-    setModalContent(feature.content);
-    setModalVisible(true);
+    if (isNavFeature(feature)) {
+      // Use direct string paths for router.push for navigation features
+      router.push('/screens/DiagnosisHistoryScreen');
+    } else {
+      // For modal features, use the content
+      setModalTitle(feature.title);
+      setModalContent(feature.content);
+      setModalVisible(true);
+    }
   };
 
   const handleOpenDrawer = () => {
     router.push('/screens/DrawerScreen');
   };
 
+  // Combine all features into a single array
   const featureData: Feature[] = [
     { iconSet: 'Ionicons', iconName: 'leaf-outline', title: t.cropDoctor, color: '#ff8c42', content: 'Upload a clear picture of the affected leaf...' },
     { iconSet: 'MaterialCommunityIcons', iconName: 'tractor', title: t.govtSchemes, color: '#4CAF50', content: 'Find government schemes...' },
     { iconSet: 'Ionicons', iconName: 'partly-sunny-outline', title: t.weather, color: '#64b5f6', content: 'Today\'s forecast...' },
-    { iconSet: 'Ionicons', iconName: 'flask-outline', title: t.localRemedies, color: '#ffa726', content: 'Discover effective, low-cost remedies...' },
+    // "Your Diagnosis" as a NavFeature, using Ionicons icon and a path
+    { iconSet: 'Ionicons', iconName: 'document-text-outline', title: t.yourDiagnosis, color: '#f0ad4e', path: '/screens/DiagnosisHistoryScreen' },
   ];
 
   return (
@@ -58,7 +84,6 @@ const HomeScreen = (): React.JSX.Element => {
             <Ionicons name="menu" size={28} color="#333" />
           </TouchableOpacity>
           <Image source={require('../../assets/images/logo.png')} style={styles.headerLogo} />
-          {/* ADDED: Wrapper for right-side icons */}
           <View style={styles.rightHeaderIcons}>
             <TouchableOpacity onPress={() => router.push('/screens/NotificationsScreen')} style={styles.headerButton}>
               <Ionicons name="notifications-outline" size={24} color="#333" />
@@ -94,6 +119,7 @@ const HomeScreen = (): React.JSX.Element => {
           <View style={styles.featuresGrid}>
             {featureData.map((item, index) => (
               <TouchableOpacity key={index} style={styles.featureCardContainer} onPress={() => handleFeaturePress(item)}>
+                {/* FeatureCard now handles both modal and nav features consistently */}
                 <FeatureCard iconSet={item.iconSet} iconName={item.iconName} title={item.title} color={item.color} />
               </TouchableOpacity>
             ))}
@@ -128,7 +154,6 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 40, paddingHorizontal: 15, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#eee' },
   headerButton: { padding: 5 },
   headerLogo: { width: 150, height: 40, resizeMode: 'contain' },
-  // ADDED: Style for the new icon wrapper
   rightHeaderIcons: {
     flexDirection: 'row',
     alignItems: 'center',
