@@ -83,7 +83,7 @@ const HomeScreen = (): React.JSX.Element => {
                 <Ionicons name="mic-outline" size={24} color="#555" />
                 <Text style={styles.inputOptionText}>{t.voiceInput}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.inputOption} onPress={() => router.push('/screens/ImageInputScreen')}>
+              <TouchableOpacity style={styles.inputOption} onPress={() => router.push('/screens/ImageOptionsScreen')}>
                 <Ionicons name="camera-outline" size={24} color="#555" />
                 <Text style={styles.inputOptionText}>{t.imageInput}</Text>
               </TouchableOpacity>
