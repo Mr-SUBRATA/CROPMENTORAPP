@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ImageBackground, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { translations } from '../../constants/translations';
 import TermsAndPrivacyText from '../../components/ui/TermsAndPrivacyText';
+
+const { width, height } = Dimensions.get('window');
 
 const LoginScreen = (): React.JSX.Element => {
     const [lang, setLang] = useState('en');
@@ -30,15 +32,14 @@ const LoginScreen = (): React.JSX.Element => {
     };
 
     return (
-        <ImageBackground
-            source={require('../../assets/images/bg_farm.png')}
-            style={styles.background}
-            resizeMode="cover"
-        >
+        <View style={styles.container}>
+            <View style={styles.topLeftGreenBlob} />
+            <View style={styles.bottomRightGreenBlob} />
+
             <SafeAreaView style={styles.safeArea}>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    style={styles.container}
+                    style={styles.keyboardAvoidingView}
                 >
                     <View style={styles.loginContainer}>
                         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
@@ -52,10 +53,10 @@ const LoginScreen = (): React.JSX.Element => {
                                 placeholder={t.mobileOrEmail}
                                 style={styles.input}
                                 placeholderTextColor="#888"
-                                keyboardType="number-pad" // Use number-pad for mobile number input
+                                keyboardType="number-pad"
                                 value={mobileOrEmail}
                                 onChangeText={setMobileOrEmail}
-                                maxLength={10} // Restrict to 10 characters
+                                maxLength={10}
                             />
                         </View>
                         <View style={styles.inputGroup}>
@@ -92,26 +93,47 @@ const LoginScreen = (): React.JSX.Element => {
                     </View>
                 </KeyboardAvoidingView>
             </SafeAreaView>
-        </ImageBackground>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    background: {
+    container: {
         flex: 1,
+        backgroundColor: '#fff',
+    },
+    topLeftGreenBlob: {
+        position: 'absolute',
+        top: -height * 0.3,
+        left: -width * 0.7,
+        width: width,
+        height: height * 0.7,
+        backgroundColor: '#5cb85c',
+        borderRadius: 200,
+        transform: [{ rotate: '30deg' }],
+    },
+    bottomRightGreenBlob: {
+        position: 'absolute',
+        bottom: -height * 0.3,
+        right: -width * 0.7,
+        width: width,
+        height: height * 0.7,
+        backgroundColor: '#5cb85c',
+        borderRadius: 200,
+        transform: [{ rotate: '30deg' }],
     },
     safeArea: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.3)', // Dark overlay for better text readability
+        zIndex: 1,
     },
-    container: {
+    keyboardAvoidingView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
     loginContainer: {
         width: '90%',
-        backgroundColor: 'rgba(255, 255, 255, 0)',
+        backgroundColor: 'transparent', // Changed to transparent
         borderRadius: 20,
         padding: 25,
         alignItems: 'center',
@@ -211,7 +233,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#555',
     },
-    // Added style for disabled button
     disabledButton: {
         opacity: 0.5,
     },
