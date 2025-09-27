@@ -3,7 +3,7 @@ import { translations } from '@/constants/translations';
 
 const i18n = new I18n(translations);
 
-// Set the locale once at the beginning of your app.
+// Set the locale to English initially, but it will be overridden by the context.
 i18n.locale = 'en';
 
 // When a value is missing from a language it'll fallback to another language with the key present.

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import FeatureCard from '../../components/FeatureCard';
 import { translations } from '../../constants/translations';
 import FeatureModal from '../../components/FeatureModal';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLanguage } from '../context/LanguageContext'; // Import the new hook
 
 const { width } = Dimensions.get('window');
 
@@ -37,8 +37,8 @@ const isNavFeature = (feature: Feature): feature is NavFeature => {
 };
 
 const HomeScreen = (): React.JSX.Element => {
-  const [lang, setLang] = useState('en');
   const router = useRouter();
+  const { language } = useLanguage(); // Use the language hook
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const [modalTitle, setModalTitle] = useState('');
@@ -50,15 +50,7 @@ const HomeScreen = (): React.JSX.Element => {
     icon: 'partly-sunny-outline',
   });
 
-  useEffect(() => {
-    const getLang = async () => {
-      const savedLang = await AsyncStorage.getItem('selectedLang');
-      if (savedLang) { setLang(savedLang); }
-    };
-    getLang();
-  }, []);
-
-  const t = translations[lang as keyof typeof translations] || translations.en;
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   const handleFeaturePress = (feature: Feature) => {
     if (isNavFeature(feature)) {

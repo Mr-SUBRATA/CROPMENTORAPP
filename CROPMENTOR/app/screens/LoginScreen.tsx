@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { translations } from '../../constants/translations';
 import TermsAndPrivacyText from '../../components/ui/TermsAndPrivacyText';
+import { useLanguage } from '../context/LanguageContext'; // Import the new hook
 
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen = (): React.JSX.Element => {
-    const [lang, setLang] = useState('en');
     const [mobileOrEmail, setMobileOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
+    const { language } = useLanguage(); // Use the language hook to get the current language
 
-    useEffect(() => {
-        const getLang = async () => {
-            const savedLang = await AsyncStorage.getItem('selectedLang') || 'en';
-            setLang(savedLang);
-        };
-        getLang();
-    }, []);
-
-    const t = translations[lang as keyof typeof translations] || translations.en;
+    const t = translations[language as keyof typeof translations] || translations.en;
     
     // Check if the mobile number is 10 digits and password is not empty
     const isValid = mobileOrEmail.length === 10 && !isNaN(Number(mobileOrEmail)) && password.length > 0;
@@ -133,7 +126,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         width: '90%',
-        backgroundColor: 'transparent', // Changed to transparent
+        backgroundColor: 'transparent',
         borderRadius: 20,
         padding: 25,
         alignItems: 'center',

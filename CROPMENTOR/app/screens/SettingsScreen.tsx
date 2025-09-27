@@ -1,26 +1,21 @@
-// mr-subrata/cropmentorapp/CROPMENTORAPP-91fc9ddd2f3767e27dbd9adbb95f3f9578438a35/CROPMENTOR/app/screens/SettingsScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ScrollView, Switch, Modal, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { useLanguage } from '../context/LanguageContext'; // Import the new hook
+import { translations } from '../../constants/translations';
 
 const SettingsScreen = (): React.JSX.Element => {
     const router = useRouter();
+    const { language, setLanguage } = useLanguage(); // Use the new hook
     const [notificationsExpanded, setNotificationsExpanded] = useState(false);
     const [disasterAlert, setDisasterAlert] = useState(true);
     const [weatherAlert, setWeatherAlert] = useState(true);
     const [marketAlert, setMarketAlert] = useState(false);
     const [languageModalVisible, setLanguageModalVisible] = useState(false);
-    const [currentLang, setCurrentLang] = useState('en');
 
-    useEffect(() => {
-        const getLang = async () => {
-            const savedLang = await AsyncStorage.getItem('selectedLang') || 'en';
-            setCurrentLang(savedLang);
-        };
-        getLang();
-    }, []);
+    const t = translations[language as keyof typeof translations] || translations.en;
 
     const handleLogout = async () => {
         try {
@@ -31,10 +26,9 @@ const SettingsScreen = (): React.JSX.Element => {
 
     const handleSelectLanguage = async (langCode: string) => {
         try {
-            await AsyncStorage.setItem('selectedLang', langCode);
-            setCurrentLang(langCode);
+            await setLanguage(langCode);
             setLanguageModalVisible(false);
-            Alert.alert('Language Updated', `Language set to ${languageOptions.find(l => l.code === langCode)?.name}. Please restart the app to see changes.`);
+            Alert.alert('Language Updated', `Language set to ${languageOptions.find(l => l.code === langCode)?.name}. Please restart the app to see all changes.`);
         } catch (error) { console.error('Failed to save language:', error); }
     };
 
@@ -57,59 +51,59 @@ const SettingsScreen = (): React.JSX.Element => {
                 <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#007aff" />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Settings</Text>
+                <Text style={styles.headerTitle}>{t.settings.settingsTitle}</Text>
             </View>
 
             <ScrollView contentContainerStyle={styles.content}>
                 {/* Account Section */}
-                <Text style={styles.sectionTitle}>Account</Text>
+                <Text style={styles.sectionTitle}>{t.personalInformation}</Text>
                 <View style={styles.section}>
                     <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/ProfileScreen')}>
                         <Ionicons name="person-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Edit Profile</Text>
+                        <Text style={styles.rowLabel}>{t.settings.myProfileText}</Text>
                         <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                     {/* The "Your Diagnosis" item has been moved to the home screen. */}
                 </View>
 
                 {/* FIXED: App Settings Section */}
-                <Text style={styles.sectionTitle}>App Settings</Text>
+                <Text style={styles.sectionTitle}>{t.appSettings}</Text>
                 <View style={styles.section}>
                     <TouchableOpacity style={styles.row} onPress={() => setLanguageModalVisible(true)}>
                         <Ionicons name="globe-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Language</Text>
+                        <Text style={styles.rowLabel}>{t.settings.changeLanguageText}</Text>
                         <View style={styles.languageIndicator}>
-                            <Text style={styles.currentLangText}>{languageOptions.find(l => l.code === currentLang)?.name}</Text>
+                            <Text style={styles.currentLangText}>{languageOptions.find(l => l.code === language)?.name}</Text>
                             <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                         </View>
                     </TouchableOpacity>
                     <View style={styles.divider} />
                     <TouchableOpacity style={styles.row} onPress={() => setNotificationsExpanded(!notificationsExpanded)}>
                         <Ionicons name="notifications-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Notifications</Text>
+                        <Text style={styles.rowLabel}>{t.settings.notificationsTitle}</Text>
                         <Ionicons name={notificationsExpanded ? 'chevron-down' : 'chevron-forward'} size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                     {notificationsExpanded && (
                         <View style={styles.subSection}>
-                            <View style={styles.subRow}><Text style={styles.subRowLabel}>Disaster Alert</Text><Switch value={disasterAlert} onValueChange={setDisasterAlert} /></View>
-                            <View style={styles.subRow}><Text style={styles.subRowLabel}>Weather Alert</Text><Switch value={weatherAlert} onValueChange={setWeatherAlert} /></View>
-                            <View style={styles.subRow}><Text style={styles.subRowLabel}>Market Alert</Text><Switch value={marketAlert} onValueChange={setMarketAlert} /></View>
+                            <View style={styles.subRow}><Text style={styles.subRowLabel}>{t.settings.disasterAlertsToggleText}</Text><Switch value={disasterAlert} onValueChange={setDisasterAlert} /></View>
+                            <View style={styles.subRow}><Text style={styles.subRowLabel}>{t.settings.weatherAlertsText}</Text><Switch value={weatherAlert} onValueChange={setWeatherAlert} /></View>
+                            <View style={styles.subRow}><Text style={styles.subRowLabel}>{t.settings.marketUpdatesText}</Text><Switch value={marketAlert} onValueChange={setMarketAlert} /></View>
                         </View>
                     )}
                 </View>
 
                 {/* FIXED: Support Section */}
-                <Text style={styles.sectionTitle}>Support</Text>
+                <Text style={styles.sectionTitle}>{t.supportHelpCentre}</Text>
                 <View style={styles.section}>
                     <TouchableOpacity style={styles.row} onPress={() => router.push('/screens/SupportHelpScreen')}>
                         <Ionicons name="help-circle-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Support & Help</Text>
+                        <Text style={styles.rowLabel}>{t.supportHelpCentre}</Text>
                         <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                     <View style={styles.divider} />
                     <TouchableOpacity style={styles.row} onPress={() => Alert.alert('Report a Problem', 'Feature coming soon!')}>
                         <Ionicons name="alert-circle-outline" size={20} color="#555" style={styles.rowIcon} />
-                        <Text style={styles.rowLabel}>Report a Problem</Text>
+                        <Text style={styles.rowLabel}>{t.settings.reportProblemText}</Text>
                         <Ionicons name="chevron-forward" size={20} color="#c7c7cc" />
                     </TouchableOpacity>
                 </View>
@@ -125,8 +119,8 @@ const SettingsScreen = (): React.JSX.Element => {
                         <Text style={styles.modalTitle}>Select Language</Text>
                         <FlatList data={languageOptions} keyExtractor={(item) => item.code} renderItem={({ item }) => (
                             <TouchableOpacity style={styles.langOption} onPress={() => handleSelectLanguage(item.code)}>
-                                <Text style={[styles.langText, item.code === currentLang && styles.selectedLangText]}>{item.name}</Text>
-                                {item.code === currentLang && <Ionicons name="checkmark" size={20} color="#007aff" />}
+                                <Text style={[styles.langText, item.code === language && styles.selectedLangText]}>{item.name}</Text>
+                                {item.code === language && <Ionicons name="checkmark" size={20} color="#007aff" />}
                             </TouchableOpacity>
                         )} />
                     </View>

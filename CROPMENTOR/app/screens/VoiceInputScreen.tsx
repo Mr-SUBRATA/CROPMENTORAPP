@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { translations } from '../../constants/translations';
+import { useLanguage } from '../context/LanguageContext';
 
 const VoiceInputScreen = (): React.JSX.Element => {
   const router = useRouter();
-  const t = translations.en;
+  const { language } = useLanguage();
+  const t = translations[language as keyof typeof translations] || translations.en;
   const [isListening, setIsListening] = useState(false);
 
   const handleVoiceInput = () => {

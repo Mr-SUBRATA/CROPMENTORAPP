@@ -1,26 +1,26 @@
-import { StyleSheet, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Image, ScrollView, SafeAreaView } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 import { Colors } from '@/constants/theme';
-import i18n from '@/lib/i18n';
-import { ScrollView } from 'react-native-gesture-handler';
+import { translations } from '../../constants/translations';
+import { useLanguage } from '../context/LanguageContext'; // Make sure this hook exists
 
 export default function ProfileScreen() {
     const colorScheme = useColorScheme();
     const isDark = colorScheme === 'dark';
+    const { language } = useLanguage(); // Get the current language from context
+    const t = translations[language as keyof typeof translations] || translations.en;
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background }}>
             <ScrollView contentContainerStyle={styles.container}>
                 <ThemedView style={styles.profileHeader}>
-                    {/* Placeholder image. You can replace this with a user's profile picture */}
                     <Image
                         source={require('@/assets/images/farmer_avater.png')}
                         style={styles.profileImage}
                     />
-                    {/* This is static data for now. You'll connect this to a backend later. */}
                     <ThemedText type="title" style={styles.userName}>
                         subrata das
                     </ThemedText>
@@ -31,7 +31,7 @@ export default function ProfileScreen() {
 
                 <ThemedView style={styles.section}>
                     <ThemedText type="subtitle" style={styles.sectionTitle}>
-                        {i18n.t('personalInformation')}
+                        {t.personalInformation}
                     </ThemedText>
                     <ThemedText style={styles.sectionItem}>
                         Email: subrata@example.com
@@ -43,17 +43,15 @@ export default function ProfileScreen() {
 
                 <ThemedView style={styles.section}>
                     <ThemedText type="subtitle" style={styles.sectionTitle}>
-                        {i18n.t('appSettings')}
+                        {t.appSettings}
                     </ThemedText>
                     <ThemedText style={styles.sectionItem}>
-                        Language: English
+                        Language: {language}
                     </ThemedText>
                     <ThemedText style={styles.sectionItem}>
                         Notifications: On
                     </ThemedText>
                 </ThemedView>
-
-                {/* Additional sections for Crop History, etc. can be added here */}
             </ScrollView>
         </SafeAreaView>
     );

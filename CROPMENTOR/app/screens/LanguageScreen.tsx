@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions, SafeAreaView } from 'react-native';
 import { useRouter } from 'expo-router';
 import i18n from '@/lib/i18n';
+import { useLanguage } from '../context/LanguageContext'; // Import the new hook
 
 const { width, height } = Dimensions.get('window');
 
 const LanguageScreen = (): React.JSX.Element => {
   const router = useRouter();
-  const [selectedLang, setSelectedLang] = useState('');
+  const { language, setLanguage } = useLanguage(); // Use the language hook
+  const [selectedLang, setSelectedLang] = useState(language);
+
+  useEffect(() => {
+    setSelectedLang(language);
+  }, [language]);
 
   const languages = [
     { code: 'en', name: 'English', prompt: 'For english tap here' },
     { code: 'bn', name: 'বাংলা', prompt: 'বাংলার জন্য এখানে টিপুন' },
     { code: 'hi', name: 'हिंदी', prompt: 'हिंदी के लिए यहां टैप करें' },
     { code: 'ml', name: 'മലയാളം', prompt: 'മലയാളത്തിന് ഇവിടെ ടാപ്പുചെയ്യുക' },
-    { code: 'te', name: 'తెలుగు', prompt: 'తెలుగు కోసం ഇక్కడ നొక్కండి' },
+    { code: 'te', name: 'తెలుగు', prompt: 'తెలుగు కోసం ఇక్కడ నొక్కండి' },
     { code: 'ta', name: 'தமிழ்', prompt: 'தமிழ் தேர்ந்தெடுக்க இங்கே தட்டவும்' },
     { code: 'mr', name: 'मराठी', prompt: 'मराठीसाठी येथे टॅप करा' },
     { code: 'gu', name: 'ગુજરાતી', prompt: 'ગુજરાતી માટે અહીં ટેપ કરો' },
@@ -23,24 +28,13 @@ const LanguageScreen = (): React.JSX.Element => {
     { code: 'pa', name: 'ਪੰਜਾਬੀ', prompt: 'ਪੰਜਾਬੀ ਲਈ ਇੱਥੇ ਟੈਪ ਕਰੋ' },
   ];
 
-  useEffect(() => {
-    const getSavedLanguage = async () => {
-      const savedLang = await AsyncStorage.getItem('selectedLang');
-      if (savedLang) {
-        setSelectedLang(savedLang);
-      }
-    };
-    getSavedLanguage();
-  }, []);
-
-  const selectLanguage = async (langCode: string) => {
+  const handleSelectLanguage = (langCode: string) => {
     setSelectedLang(langCode);
   };
 
   const handleContinue = async () => {
     if (selectedLang) {
-      await AsyncStorage.setItem('selectedLang', selectedLang);
-      i18n.locale = selectedLang;
+      await setLanguage(selectedLang);
       router.push('/screens/LoginScreen');
     }
   };
@@ -51,7 +45,7 @@ const LanguageScreen = (): React.JSX.Element => {
         styles.langButton,
         item.code === selectedLang && styles.selectedLangButton,
       ]}
-      onPress={() => selectLanguage(item.code)}
+      onPress={() => handleSelectLanguage(item.code)}
     >
       <Text style={[
         styles.langButtonText,
@@ -67,7 +61,7 @@ const LanguageScreen = (): React.JSX.Element => {
       <View style={styles.topLeftGreenBlob} />
       <View style={styles.bottomRightGreenBlob} />
       
-      <View style={styles.contentContainer}>
+      <SafeAreaView style={styles.contentContainer}>
         <View style={styles.header}>
           <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.instructionText}>Please Select Your Language</Text>
@@ -89,7 +83,7 @@ const LanguageScreen = (): React.JSX.Element => {
         >
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </View>
   );
 };

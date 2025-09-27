@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { translations } from '../../constants/translations';
+import { useLanguage } from '../context/LanguageContext';
 
 const WrittenInputScreen = (): React.JSX.Element => {
   const router = useRouter();
-  const t = translations.en; // Assuming English for now, you can add language state if needed.
+  const { language } = useLanguage();
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   return (
     <SafeAreaView style={styles.safeArea}>
